@@ -20,8 +20,8 @@ Install
 
 1. Run some commands:
 
-    cd "${ZSH_CUSTOM}/plugins"
-    git clone https://github.com/jeffwalter/zsh-plugin-jwalter.git
+        cd "${ZSH_CUSTOM}/plugins"
+        git clone https://github.com/jeffwalter/zsh-plugin-jwalter.git
 
 2. Add `zsh-plugin-jwalter` to `plugins` in `${HOME}/.zshrc`
 3. Restart your shell
