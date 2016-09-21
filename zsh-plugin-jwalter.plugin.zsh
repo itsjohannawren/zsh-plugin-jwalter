@@ -232,13 +232,14 @@ Usage:
     jw <ACTION> [PLUGIN]
 
 Actions:
-	list-remote          Lists the remote plugins available for installation
-	list                 Lists the local plugins that are currently installed
-	install      PLUGIN  Installs the specified plugin
-	upgrade      PLUGIN  Upgrades the specified plugin
-	remove       PLUGIN  Removes the specified plugin
-	enable       PLUGIN  Enables the specified plugin
-	disable      PLUGIN  Disables the specified plugin
+    help                 This stuff that you're reading right now
+    list-remote          Lists the remote plugins available for installation
+    list                 Lists the local plugins that are currently installed
+    install      PLUGIN  Installs the specified plugin
+    upgrade      PLUGIN  Upgrades the specified plugin
+    remove       PLUGIN  Removes the specified plugin
+    enable       PLUGIN  Enables the specified plugin
+    disable      PLUGIN  Disables the specified plugin
 
 EOF
 }
