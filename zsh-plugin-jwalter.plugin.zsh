@@ -6,7 +6,6 @@ __JWALTER_PLUGIN_DIR="${__JWALTER_DIR}/plugins"
 
 __JWALTER_GITHUB="jeffwalter"
 __JWALTER_PLUGIN_PREFIX="zsh-plugin-"
-__JWALTER_METADATA_TTL="300"
 
 __jwalter_checkConfig() {
 	if [ ! -d "${__JWALTER_PLUGIN_DIR}" ]; then
@@ -111,9 +110,15 @@ __jwalter_list_local() {
 
 	#shellcheck disable=2162
 	__jwalter_localPlugins | while read PLUGIN; do
-		printf "%-15s %9s  %s\n" "${PLUGIN}" "v$(__jwalter_localPluginMetadataValue "${PLUGIN}" "VERSION")" "$(__jwalter_localPluginMetadataValue "${PLUGIN}" "DESCRIPTION")"
+		if __jwalter_pluginEnabled "${PLUGIN}"; then
+			printf "%-15s* %9s  %s\n" "${PLUGIN}" "v$(__jwalter_localPluginMetadataValue "${PLUGIN}" "VERSION")" "$(__jwalter_localPluginMetadataValue "${PLUGIN}" "DESCRIPTION")"
+		else
+			printf "%-15s  %9s  %s\n" "${PLUGIN}" "v$(__jwalter_localPluginMetadataValue "${PLUGIN}" "VERSION")" "$(__jwalter_localPluginMetadataValue "${PLUGIN}" "DESCRIPTION")"
+		fi
 	done
 
+	echo
+	echo "* - Enabled"
 }
 
 __jwalter_install() {
