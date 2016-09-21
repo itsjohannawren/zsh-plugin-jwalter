@@ -219,8 +219,10 @@ __jwalter_load() {
 	PLUGIN="${1}"
 
 	if [ -f "${__JWALTER_PLUGIN_DIR}/${__JWALTER_PLUGIN_PREFIX}${PLUGIN}/${__JWALTER_PLUGIN_PREFIX}${PLUGIN}.plugin.zsh" ] && [ -r "${__JWALTER_PLUGIN_DIR}/${__JWALTER_PLUGIN_PREFIX}${PLUGIN}/${__JWALTER_PLUGIN_PREFIX}${PLUGIN}.plugin.zsh" ]; then
-		#shellcheck disable=1090
-		source "${__JWALTER_PLUGIN_DIR}/${__JWALTER_PLUGIN_PREFIX}${PLUGIN}/${__JWALTER_PLUGIN_PREFIX}${PLUGIN}.plugin.zsh"
+		if __jwalter_pluginEnabled "${PLUGIN}"; then
+			#shellcheck disable=1090
+			source "${__JWALTER_PLUGIN_DIR}/${__JWALTER_PLUGIN_PREFIX}${PLUGIN}/${__JWALTER_PLUGIN_PREFIX}${PLUGIN}.plugin.zsh"
+		fi
 		return 0
 	fi
 
