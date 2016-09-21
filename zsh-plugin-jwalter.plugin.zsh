@@ -42,29 +42,10 @@ __jwalter_remotePlugins() {
 }
 
 __jwalter_remotePluginMetadata() {
-	local PLUGIN PLUGIN_SAFE PLUGIN_METADATA_VAR PLUGIN_METATIME_VAR NOW
+	local PLUGIN
 	PLUGIN="${1}"
-	PLUGIN_SAFE="$(sed -e 's/[^a-zA-Z0-9_]/_/g' <<<"${PLUGIN}")"
-	PLUGIN_METADATA_VAR="__JWALTER_PLUGIN_METADATA_${PLUGIN_SAFE}"
-	PLUGIN_METATIME_VAR="__JWALTER_PLUGIN_METATIME_${PLUGIN_SAFE}"
-	NOW="$(date +"%s")"
 
-	#shellcheck disable=2004
-	if [ -z "${!PLUGIN_METATIME_VAR}" ] || [ "$((${!PLUGIN_METATIME_VAR} + __JWALTER_METADATA_TTL))" -lt "${NOW}" ]; then
-		#shellcheck disable=2086
-		eval ${PLUGIN_METADATA_VAR}="\$(curl -s \"https://raw.githubusercontent.com/\${__JWALTER_GITHUB}/\${__JWALTER_PLUGIN_PREFIX}\${PLUGIN}/master/METADATA\" 2>/dev/null)"
-		#shellcheck disable=2086
-		eval ${PLUGIN_METATIME_VAR}="${NOW}"
-		if [ "$(head -n 1 <<<"${!PLUGIN_METADATA_VAR}")" != "REPO:jwalter-1" ]; then
-			#shellcheck disable=2086
-			eval unset ${PLUGIN_METADATA_VAR}
-			#shellcheck disable=2086
-			eval unset ${PLUGIN_METATIME_VAR}
-			return 1
-		fi
-	fi
-
-	echo "${!PLUGIN_METADATA_VAR}"
+	curl -s "https://raw.githubusercontent.com/${__JWALTER_GITHUB}/${__JWALTER_PLUGIN_PREFIX}${PLUGIN}/master/METADATA" 2>/dev/null
 }
 
 __jwalter_remotePluginMetadataValue() {
@@ -232,8 +213,10 @@ __jwalter_load() {
 __jwalter_load_all() {
 	#shellcheck disable=2162
 	while read PLUGIN; do
-		if ! __jwalter_load "${PLUGIN}"; then
-			echo "Warn:  Failed to load plugin ${PLUGIN}" 1>&2
+		if [ -n "${PLUGIN}" ]; then
+			if ! __jwalter_load "${PLUGIN}"; then
+				echo "Warn:  Failed to load plugin ${PLUGIN}" 1>&2
+			fi
 		fi
 	done <<<"$(__jwalter_localPlugins)"
 }
