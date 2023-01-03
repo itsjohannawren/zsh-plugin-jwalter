@@ -4,7 +4,7 @@ __JWALTER_SOURCE="${BASH_SOURCE[0]}"
 __JWALTER_DIR="$(cd "$(dirname "${__JWALTER_SOURCE:-$0}")" &>/dev/null && pwd)"
 __JWALTER_PLUGIN_DIR="${__JWALTER_DIR}/plugins"
 
-__JWALTER_GITHUB="jeffwalter"
+__JWALTER_GITHUB="itsjohannawren"
 __JWALTER_PLUGIN_PREFIX="zsh-plugin-"
 
 __jwalter_checkConfig() {
@@ -37,7 +37,10 @@ __jwalter_checkPluginName() {
 }
 
 __jwalter_remotePlugins() {
-	curl -s "https://github.com/${__JWALTER_GITHUB}?page=1&tab=repositories&q=${__JWALTER_PLUGIN_PREFIX}" 2>/dev/null | awk '/<a href="\/[^"\/]+\/([^"\/]+)" itemprop="name codeRepository">/ {sub(/^.*<a href="\/[^"\/]+\//,"",$0); sub(/" itemprop=".*$/,"",$0); if ($0 !~ /-jwalter$/) {print;}}' | sed -e "s/^${__JWALTER_PLUGIN_PREFIX}//" | sort
+	curl -s "https://api.github.com/users/${__JWALTER_GITHUB}/repos" 2>/dev/null | \
+		jq -r '.[].name' | \
+		awk -v prefix="${__JWALTER_PLUGIN_PREFIX}" '$0 ~ "^" prefix {sub("^" prefix,""); print;}' | \
+		sort
 }
 
 __jwalter_remotePluginMetadata() {
